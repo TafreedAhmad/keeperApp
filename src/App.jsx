@@ -49,7 +49,7 @@
 // function App() {
 //   return (
 //     <div className='App'>
-      
+
 //       <h1>
 //         <span>emojipedia</span>
 //       </h1>
@@ -59,33 +59,53 @@
 
 //     </div>
 //   );
-// }
+// } 
 
 import React from "react";
-import './Keeper.css'
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import notes from "./notes";
 import Note from "./components/Note";
-
-
-function Newnote(tncon)//title and content
-{
-  return(
-    <Note
-    key={tncon.key}
-    title={tncon.title}
-    content={tncon.content}
-    />
-  )
-
-}
+import CreateArea from "./components/CreateArea";
+import './Keeper.css';
+import { useState } from "react";
 
 function App() {
+
+  const [oldNotes, modifyNote] = useState([]);
+
+  function addNote(newNote) {
+    modifyNote(prevValue => {
+      return [...prevValue, newNote]
+    })
+  }
+
+  function deleteNote(id) {
+    modifyNote(prevValue => {
+      return prevValue.filter(
+        (noteItem, index) => {
+          return index !== id;
+
+        });
+    });
+
+  }
+
+
   return (
     <div>
       <Header />
-      {notes.map(Newnote)}
+      <CreateArea onAdd={addNote} />
+      {oldNotes.map((allNotes, index)=>{
+        return (
+          <Note
+            key={index}
+            id={index}
+            title={allNotes.title}
+            content={allNotes.content}
+            onDelete={deleteNote}
+          />
+        )
+      })}
       <Footer />
     </div>
   );
